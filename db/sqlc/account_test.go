@@ -8,6 +8,11 @@ import (
 )
 
 func TestCreatAccount(t *testing.T) {
+	CreateRandomAccount(t)
+}
+
+
+func CreateRandomAccount(t *testing.T) Account {
 	arg := CreateAccountParams{
 		Owner:    util.RandomOwner(),
 		Balance:  util.RandomMoney(),
@@ -23,4 +28,5 @@ func TestCreatAccount(t *testing.T) {
 
 	require.NotZero(t, account.ID)
 	require.NotZero(t, account.CreatedAt)
+	return account
 }
