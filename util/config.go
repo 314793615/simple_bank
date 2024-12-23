@@ -11,7 +11,7 @@ type Config struct {
 	DBSource string
 	DBDriver string
 	Address string
-	SymmetricKey string
+	TokenSymmetricKey string
 	
 }
 

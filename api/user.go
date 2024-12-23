@@ -25,7 +25,7 @@ type userResponse struct{
 
 func newUserResponse(user db.User) userResponse{
 	return userResponse{
-		UserName: user.,
+		UserName: user.UserName,
 		FullName: user.full_name,
 	}
 }

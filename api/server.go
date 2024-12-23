@@ -45,6 +45,6 @@ func (server *Server) SetUpRouter(){
 
 }
 
-func errorResponse(err error) gin.H{
+func errorResponse(err error) gin.H {
 	return gin.H{"err": err.Error()}
 }

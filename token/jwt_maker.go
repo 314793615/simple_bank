@@ -1,7 +1,6 @@
 package token
 
 import (
-	"crypto/internal/nistec"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"

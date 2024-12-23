@@ -6,5 +6,5 @@ import (
 
 type TokenMaker interface {
 	CreateToken(username string, duration time.Duration) (string, error)
-	VerifyToken(string) (*PayLoad, error)
+	VerifyToken(tokenString string) (*PayLoad, error)
 }

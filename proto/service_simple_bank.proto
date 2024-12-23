@@ -1,0 +1,22 @@
+syntax = "proto3"
+
+package pb
+
+option go_pakcage = "github.com/314793615/simple_bank/pb"
+
+service SimpleBank {
+    rpc CreateUser (CreateUserRequest) return (CreateUserResponse) {
+        option (google.api.http) = {
+            post: "/v1/create_user"
+            body: "*"
+        };
+    }
+
+    rpc LoginUser (LoginUserRequest) return (LoginUserResponse) {
+        option (google.api.http) = {
+            post: "/v1/login_user"
+            body: "*"
+        };
+    } 
+
+}
