@@ -33,11 +33,19 @@ func newUserResponse(user db.User) userResponse{
 func (s *Server) CreateUser(ctx *gin.Context){
 	var req createUserRequest
 	err := ctx.ShouldBindJSON(&req)
-	if err != nil{
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return 
 	}
 	rsp := newUserResponse()
 
 	ctx.JSON(http.StatusOK, rsp)
+}
+
+func (s *Server) GetUser(ctx *gin.Context) {
+	
+}
+
+func (s *Server) ListUser(ctx *gin.Context) {
+
 }

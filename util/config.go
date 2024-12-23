@@ -11,6 +11,8 @@ type Config struct {
 	DBSource string
 	DBDriver string
 	Address string
+	SymmetricKey string
+	
 }
 
 func NewConfig(path string) (*Config, error ){
