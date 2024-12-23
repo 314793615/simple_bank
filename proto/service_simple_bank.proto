@@ -1,22 +1,26 @@
-syntax = "proto3"
+syntax = "proto3";
 
-package pb
+package pb;
 
-option go_pakcage = "github.com/314793615/simple_bank/pb"
+import "rpc_create_user.proto";
+import "rpc_login_user.proto";
+
+option go_package = "github.com/314793615/simple_bank/pb";
+
 
 service SimpleBank {
-    rpc CreateUser (CreateUserRequest) return (CreateUserResponse) {
-        option (google.api.http) = {
-            post: "/v1/create_user"
-            body: "*"
-        };
+    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {
+//        option (google.api.http) = {
+//            post: "/v1/create_user"
+//            body: "*"
+//        };
     }
 
-    rpc LoginUser (LoginUserRequest) return (LoginUserResponse) {
-        option (google.api.http) = {
-            post: "/v1/login_user"
-            body: "*"
-        };
+    rpc LoginUser (LoginUserRequest) returns (LoginUserResponse) {
+//        option (google.api.http) = {
+//            post: "/v1/login_user"
+//            body: "*"
+//        };
     } 
 
 }
