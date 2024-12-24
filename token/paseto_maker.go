@@ -21,13 +21,13 @@ func NewPasetoMaker(secretKey string) *PasetoMaker {
 }
 
 
-func (p *PasetoMaker) CreateToken(username string, duration time.Duration) (string, error) {
+func (p *PasetoMaker) CreateToken(username string, duration time.Duration) (string, *PayLoad, error) {
 	payload, err := NewPayLoad(username, duration)
 	if err != nil {
-		return "", err
+		return "", nil, err
 	}
 	token, err := p.paseto.Encrypt([]byte(p.secretKey), payload, err)
-	return token, err
+	return token, payload, err
 }
 
 

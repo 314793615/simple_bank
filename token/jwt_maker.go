@@ -11,14 +11,14 @@ type JWTMaker struct {
 }
 
 
-func (maker *JWTMaker) CreateToken(username string, duration time.Duration) (string, error) {
+func (maker *JWTMaker) CreateToken(username string, duration time.Duration) (string, *PayLoad, error) {
 	payload, err := NewPayLoad(username, duration)
 	if err != nil{
-		return "", err
+		return "", nil, err
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, payload)
 	tokenString, err := token.SignedString(maker.secretKey)
-	return tokenString, err
+	return tokenString, payload, err
 }
 
 

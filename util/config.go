@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/spf13/viper"
 )
@@ -12,7 +13,7 @@ type Config struct {
 	DBDriver string
 	Address string
 	TokenSymmetricKey string
-	
+	TokenDuration time.Duration
 }
 
 func NewConfig(path string) (*Config, error ){

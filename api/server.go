@@ -17,7 +17,7 @@ type Server struct{
 
 func NewServer(config *util.Config, store *db.Store ) *Server {
 	router := gin.Default()
-	maker := token.NewPasetoMaker(config.SymmetricKey)
+	maker := token.NewPasetoMaker(config.TokenSymmetricKey)
 
 	return &Server{
 		config: config,
@@ -33,15 +33,15 @@ func (server *Server) StartServer (config *util.Config) {
 
 func (server *Server) SetUpRouter(){
 	server.router.POST("/users", server.CreateUser)
-	server.router.POST("/users/login", server.loginUser)
-	server.router.POST("/tokens/renew_access", server.renewAccessToken)
+	server.router.POST("/users/login", server.LoginUser)
+	server.router.POST("/tokens/renew_access", server.RenewAccessToken)
 
-	authRoutes := server.router.Group("/").Use(authMiddleware(&server.tokenMaker))
+	authRoutes := server.router.Group("/").Use(authMiddleware(server.tokenMaker))
 	authRoutes.POST("/accounts", server.CreateAccount)
 	authRoutes.GET("/updateAccout/:id", server.GetAccount)
 	authRoutes.GET("/accounts", server.ListAccount)
 
-	authRoutes.POST("/transfers", server.createTransfer)
+	authRoutes.POST("/transfers", server.CreateTransfer)
 
 }
 
