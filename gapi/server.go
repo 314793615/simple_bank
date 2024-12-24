@@ -1,8 +1,8 @@
 package gapi
 
 import (
-
 	db "github.com/314793615/simplebank/db/sqlc"
+	"github.com/314793615/simplebank/pb"
 	"github.com/314793615/simplebank/token"
 	"github.com/314793615/simplebank/util"
 )
