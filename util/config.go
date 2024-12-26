@@ -14,6 +14,8 @@ type Config struct {
 	Address string
 	TokenSymmetricKey string
 	TokenDuration time.Duration
+	GrpcServerAddress string
+	HttpServerAddress string
 }
 
 func NewConfig(path string) (*Config, error ){

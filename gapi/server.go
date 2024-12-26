@@ -9,13 +9,13 @@ import (
 
 type Server struct {
 	pb.UnimplementedSimpleBankServer
-	config util.Config
-	store db.Store
+	config *util.Config
+	store *db.Store
 	tokenMaker token.TokenMaker
 }
 
 
-func NewServer(config util.Config, store db.Store) (*Server, error) {
+func NewServer(config *util.Config, store *db.Store) (*Server, error) {
 	tokenMaker:= token.NewPasetoMaker(config.TokenSymmetricKey)
 	return &Server{
 		config: config,
