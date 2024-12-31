@@ -22,3 +22,4 @@ func NewServer(config util.Config, store *db.Store) (*Server, error) {
 		tokenMaker: tokenMaker,
 	}, nil
 }
+

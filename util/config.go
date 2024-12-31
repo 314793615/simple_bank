@@ -16,6 +16,9 @@ type Config struct {
 	RefreshTokenDuration time.Duration
 	GrpcServerAddress    string
 	HTTPServerAddress    string
+	EmailSenderAddress string
+	EmailSenderName string
+	EmailSenderPassword string
 }
 
 func NewConfig(path string) (*Config, error) {
