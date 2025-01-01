@@ -14,4 +14,6 @@ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 go get github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway
 
 ### mockgen使用
-
+go get github.com/golang/mock/mockgen
+go get github.com/golang/mock/gomock
+go install github.com/golang/mock/mockgen

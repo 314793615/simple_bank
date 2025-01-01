@@ -4,9 +4,12 @@ import (
 	db "github.com/314793615/simplebank/db/sqlc"
 	"github.com/314793615/simplebank/pb"
 	"github.com/314793615/simplebank/util"
+	"github.com/314793615/simplebank/worker"
+	"github.com/hibiken/asynq"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"time"
 )
 
 func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
@@ -23,11 +26,22 @@ func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 	}
 
 	user, err := server.store.CreatUser(ctx, createUserParam)
-
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to create user: %w", err)
 	}
 
+	sendEmailPayload := worker.SendEmailPayload{
+		Username: user.Username,
+	}
+	options := []asynq.Option{
+		asynq.MaxRetry(10),
+		asynq.ProcessIn(10 * time.Second),
+		asynq.Queue(worker.QueueCritical),
+	}
+	err = server.taskDistributor.DistributeTaskSendVerifyEmail(ctx, sendEmailPayload, options...)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to distribute email payload: %w", err)
+	}
 	return &pb.CreateUserResponse{
 		User: transferUser(user),
 	}, nil

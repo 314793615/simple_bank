@@ -2,36 +2,36 @@ package util
 
 import (
 	"fmt"
-	"time"
-
 	"github.com/spf13/viper"
+	"time"
 )
 
 type Config struct {
-	DBSource             string
-	DBDriver             string
-	Address              string
-	TokenSymmetricKey    string
-	TokenDuration        time.Duration
-	RefreshTokenDuration time.Duration
-	GrpcServerAddress    string
-	HTTPServerAddress    string
+	DBSource             string        `mapstructure:"DB_SOURCE"`
+	DBDriver             string        `mapstructure:"DB_DRIVER"`
+	GinServerAddress     string        `mapstructure:"GIN_SERVER_ADDRESS"`
+	TokenSymmetricKey    string        `mapstructure:"TOKEN_SYMMETRIC_KEY"`
+	TokenDuration        time.Duration `mapstructure:"TOKEN_DURATION"`
+	RefreshTokenDuration time.Duration `mapstructure:"REFRESH_TOKEN_DURATION"`
+	GrpcServerAddress    string        `mapstructure:"GRPC_SERVER_ADDRESS"`
+	HTTPServerAddress    string        `mapstructure:"HTTP_SERVER_ADDRESS"`
+	RedisAddress         string        `mapstructure:"REDIS_ADDRESS"`
 }
 
 func NewConfig(path string) (*Config, error) {
-	path = ToAbsPath(path)
+	//path = ToAbsPath(path)
 	config := &Config{}
-	vip := viper.New()
-	vip.SetConfigName("app")
-	vip.AddConfigPath(path)
+	viper.AddConfigPath(path)
+	viper.SetConfigName("app")
+	viper.SetConfigType("env")
 
-	vip.AutomaticEnv()
+	viper.AutomaticEnv()
 
-	err := vip.ReadInConfig()
+	err := viper.ReadInConfig()
 	if err != nil {
 		return nil, fmt.Errorf("failed to read in config of config file: %v", err)
 	}
-	err = vip.Unmarshal(&config)
+	err = viper.Unmarshal(&config)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal config file: %v", err)
 	}
