@@ -123,7 +123,7 @@ func (server *Server) LoginUser(ctx *gin.Context) {
 
 	err = util.CheckPassword(req.Password, user.HashedPassword)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResponse(errors.New("the password is not correct")))
+		ctx.JSON(http.StatusUnauthorized, errorResponse(errors.New("the password is not correct")))
 		return
 	}
 
