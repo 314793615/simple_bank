@@ -26,7 +26,7 @@ type userResponse struct {
 	CreatedAt        time.Time `json:"created_at"`
 }
 
-func newUserResponse(user db.User) userResponse {
+func newUserResponse(user *db.User) userResponse {
 	return userResponse{
 		UserName:         user.Username,
 		FullName:         user.FullName,
@@ -58,7 +58,7 @@ func (s *Server) CreateUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
-	rsp := newUserResponse(user)
+	rsp := newUserResponse(&user)
 
 	ctx.JSON(http.StatusOK, rsp)
 }
@@ -83,7 +83,7 @@ func (s *Server) GetUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
-	rsp := newUserResponse(user)
+	rsp := newUserResponse(&user)
 
 	ctx.JSON(http.StatusOK, rsp)
 
@@ -134,7 +134,7 @@ func (server *Server) LoginUser(ctx *gin.Context) {
 	}
 
 	rsp := LoginUserResponse{
-		User:                 newUserResponse(user),
+		User:                 newUserResponse(&user),
 		AccessToken:          accessToken,
 		AccessTokenExpiredAt: payload.ExpiredAt,
 	}

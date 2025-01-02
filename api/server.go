@@ -34,12 +34,13 @@ func (server *Server) SetUpRouter() {
 	server.router.POST("/users", server.CreateUser)
 	server.router.POST("/users/login", server.LoginUser)
 	server.router.POST("/tokens/renew_access", server.RenewAccessToken)
-	server.router.GET("/accounts/:id", server.GetAccount)
+	// server.router.GET("/accounts/:id", server.GetAccount)
 
-	//authRoutes := server.router.Group("/").Use(authMiddleware(server.tokenMaker))
-	//authRoutes.POST("/accounts", server.CreateAccount)
-	//authRoutes.GET("/accounts/:id", server.GetAccount)
-	//authRoutes.GET("/accounts", server.ListAccount)
+	authRoutes := server.router.Group("/").Use(authMiddleware(server.tokenMaker))
+	authRoutes.POST("/accounts", server.CreateAccount)
+	authRoutes.GET("/accounts/:id", server.GetAccount)
+	authRoutes.GET("/accounts", server.ListAccount)
+	authRoutes.GET("/users/:username", server.GetUser)
 
 }
 
