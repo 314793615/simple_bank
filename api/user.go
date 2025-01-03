@@ -3,12 +3,14 @@ package api
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
 	db "github.com/314793615/simplebank/db/sqlc"
 	"github.com/314793615/simplebank/util"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type createUserRequest struct {
@@ -96,6 +98,7 @@ type LoginUserRequest struct {
 
 type LoginUserResponse struct {
 	User                  userResponse `json:"user"`
+	SessionId             uuid.UUID  `json:"session_id"`
 	AccessToken           string       `json:"access_token"`
 	AccessTokenExpiredAt  time.Time    `json:"access_token_expired_at"`
 	RefreshToken          string       `json:"refresh_token"`
@@ -127,16 +130,35 @@ func (server *Server) LoginUser(ctx *gin.Context) {
 		return
 	}
 
-	accessToken, payload, err := server.tokenMaker.CreateToken(user.Username, server.config.TokenDuration)
+	accessToken, accessPayload, err := server.tokenMaker.CreateToken(user.Username, server.config.TokenDuration)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
-
+	refreshToken, refreshPayLoad, err := server.tokenMaker.CreateToken(req.Username, server.config.RefreshTokenDuration)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return 
+	}
+	session, err := server.store.CreateSession(ctx, db.CreateSessionParams{
+		ID: refreshPayLoad.ID,
+		Username: user.Username,
+		RefreshToken: refreshToken,
+		UserAgent: ctx.Request.UserAgent(),
+		ClientIp: ctx.ClientIP(),
+		IsBlocked: false,
+		ExpiresAt: refreshPayLoad.ExpiredAt,
+	})
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(fmt.Errorf("cannot create session: %w", err)))
+	}
 	rsp := LoginUserResponse{
 		User:                 newUserResponse(&user),
+		SessionId: session.ID,
 		AccessToken:          accessToken,
-		AccessTokenExpiredAt: payload.ExpiredAt,
+		AccessTokenExpiredAt: accessPayload.ExpiredAt,
+		RefreshToken: refreshToken,
+		RefreshTokenExpiredAt: refreshPayLoad.ExpiredAt,
 	}
 
 	ctx.JSON(http.StatusOK, rsp)

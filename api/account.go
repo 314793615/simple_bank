@@ -20,7 +20,7 @@ func (server *Server) CreateAccount(ctx *gin.Context){
 	var err error
 	err = ctx.ShouldBindJSON(&arg)
 	if err != nil{
-		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
 

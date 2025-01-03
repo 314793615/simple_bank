@@ -40,5 +40,6 @@ func (maker *JWTMaker) VerifyToken(tokenString string) (*PayLoad, error) {
 	return payload, nil
 }
 
+var _ TokenMaker = (*JWTMaker)(nil)
 
 
